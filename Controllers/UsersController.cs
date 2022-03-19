@@ -13,6 +13,7 @@ namespace Messages.Controllers
     /// <summary>
     ///     Класс, отвечающий за работу с пользователями
     /// </summary>
+    [Route("users")]
     public class UsersController : Controller
     {
         private static readonly Random Rnd = new();
@@ -25,7 +26,7 @@ namespace Messages.Controllers
         ///     Заполнить рандомными данными.
         /// </summary>
         /// <returns></returns>
-        [HttpPost("users/fill")]
+        [HttpPost("fill")]
         public IActionResult Fill()
         {
             _users = new List<Users>();
@@ -58,7 +59,7 @@ namespace Messages.Controllers
         {
             LoadData();
             var user = new Users(userName, email);
-            if (_users.Count(item => item.Email == email) > 0) // || item.UserName == userName
+            if (_users.Any(item => item.Email == email)) // || item.UserName == userName
                 return BadRequest("Пользователь с такими данными уже существует.");
 
             _users.Add(user);
@@ -84,7 +85,7 @@ namespace Messages.Controllers
         /// </summary>
         /// <param name="email">Почта.</param>
         /// <returns>json-объект о пользователе.</returns>
-        [HttpGet("users/{email}")]
+        [HttpGet("{email}")]
         public IActionResult GetUserByEmail(string email)
         {
             LoadData();
@@ -140,6 +141,7 @@ namespace Messages.Controllers
             _users = new List<Users>();
             _messages = new List<Models.Messages>();
 
+            Console.WriteLine("start loading data...");
             try
             {
                 var users = System.IO.File.ReadAllText("users.json", Encoding.Default);
@@ -147,6 +149,8 @@ namespace Messages.Controllers
 
                 _users = JsonSerializer.Deserialize<List<Users>>(users);
                 _messages = JsonSerializer.Deserialize<List<Models.Messages>>(messages);
+
+                Console.WriteLine("data loaded.");
             }
             catch (Exception e)
             {

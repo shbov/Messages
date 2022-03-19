@@ -10,6 +10,7 @@ namespace Messages.Controllers
     /// <summary>
     ///     Класс, отвечающий за работу сообщений.
     /// </summary>
+    [Route("messages")]
     public class MessagesController : Controller
     {
         private List<Models.Messages> _messages = new();
@@ -19,7 +20,7 @@ namespace Messages.Controllers
         /// </summary>
         /// <param name="email">Email-адрес.</param>
         /// <returns>json сообщений.</returns>
-        [HttpGet("messages/from/{email}")]
+        [HttpGet("from/{email}")]
         public IActionResult GetMessagesFromUser(string email)
         {
             LoadData();
@@ -36,7 +37,7 @@ namespace Messages.Controllers
         /// </summary>
         /// <param name="email">Email-адрес.</param>
         /// <returns>json сообщений.</returns>
-        [HttpGet("messages/to/{email}")]
+        [HttpGet("to/{email}")]
         public IActionResult GetMessagesToUser(string email)
         {
             LoadData();
@@ -54,7 +55,7 @@ namespace Messages.Controllers
         /// <param name="from">Email-адрес отправителя.</param>
         /// <param name="to">Email-адрес получателя.</param>
         /// <returns>json сообщений.</returns>
-        [HttpGet("messages/{from}/{to}")]
+        [HttpGet("{from}/{to}")]
         public IActionResult GetMessagesByUser(string from, string to)
         {
             LoadData();
